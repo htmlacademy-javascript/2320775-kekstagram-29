@@ -48,7 +48,7 @@ const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1
 const getRandomArrayElement = (elements) =>
   elements[getRandomInteger(0, elements.length - 1)];
 
-//Функция для генерации id
+//Функция для создания счётчика
 const createIdGenerator = () => {
   let lastGeneratedId = 0;
 
@@ -58,6 +58,7 @@ const createIdGenerator = () => {
   };
 };
 
+//генерация id через счётчик для комментов и фотографий
 const generateCommentId = createIdGenerator();
 const generatePictureId = createIdGenerator();
 
