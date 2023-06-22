@@ -4,4 +4,4 @@ import {getPictures} from './data.js';
 Каждый объект массива — описание фотографии, опубликованной пользователем.
 */
 
-console.log(getPictures());
+getPictures();
