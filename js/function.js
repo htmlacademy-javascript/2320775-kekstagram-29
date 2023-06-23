@@ -32,8 +32,8 @@ const isMeetingInWorkingHours = (startTime, endTime, meetingStart, meetingStartI
   return false;
 };
 
-console.log(isMeetingInWorkingHours('08:00', '17:30', '14:00', 90)); // true
-console.log(isMeetingInWorkingHours('8:0', '10:0', '8:0', 120)); // true
-console.log(isMeetingInWorkingHours('08:00', '14:30', '14:00', 90)); // false
-console.log(isMeetingInWorkingHours('14:00', '17:30', '08:0', 90)); // false
-console.log(isMeetingInWorkingHours('8:00', '17:30', '08:00', 900)); // false
+isMeetingInWorkingHours('08:00', '17:30', '14:00', 90); // true
+isMeetingInWorkingHours('8:0', '10:0', '8:0', 120); // true
+isMeetingInWorkingHours('08:00', '14:30', '14:00', 90); // false
+isMeetingInWorkingHours('14:00', '17:30', '08:0', 90); // false
+isMeetingInWorkingHours('8:00', '17:30', '08:00', 900); // false
