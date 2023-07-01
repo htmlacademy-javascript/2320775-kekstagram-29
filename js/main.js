@@ -1,7 +1,5 @@
 import {getPictures} from './data.js';
-/*
-Создать массив из 25 сгенерированных объектов.
-Каждый объект массива — описание фотографии, опубликованной пользователем.
-*/
+import {drawThumbnails} from './thumbnails.js';
 
-getPictures();
+drawThumbnails(getPictures());
+
