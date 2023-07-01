@@ -3,7 +3,8 @@ const templateFragment = document.querySelector('#picture').content.querySelecto
 
 //1. Создание DOM-элемента
 //2. Наполнение шаблона данными
-const createThumbnail = ({ comments, description, likes, url }) => { //деструктуризация массива для 4 переменных
+const makeOneThumbnail = ({ comments, description, likes, url }) => { //деструктуризация массива для 4 переменных
+
   const thumbnail = templateFragment.cloneNode(true); //Клонирование содержимого шаблона
   thumbnail.querySelector('.picture__img').src = url; //Использование точечной нотации для обращения к свойству
   thumbnail.querySelector('.picture__img').alt = description;
@@ -14,15 +15,14 @@ const createThumbnail = ({ comments, description, likes, url }) => { //дест�
 };
 
 //3. Функция для отрисовки созданных элементов
-
-const drawThumbnails = (pictures) => { //Принмает массив pictures
+const getAllThumbnails = (pictures) => { //Принмает массив pictures
   const fragment = document.createDocumentFragment(); //Создание временного хранилища для эолементов
   pictures.forEach((picture) => { //Цикл перебора данных массива
-    const thumbnail = createThumbnail(picture); //Создание одного DOM-элемента
+    const thumbnail = makeOneThumbnail(picture); //Создание одного DOM-элемента
     fragment.append(thumbnail);
   });
 
   picturesContainer.append(fragment); //Добавляет созданный массив в DOM-дерево
 };
 
-export {drawThumbnails};
+export {getAllThumbnails};

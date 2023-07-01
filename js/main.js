@@ -1,5 +1,5 @@
 import {getPictures} from './data.js';
-import {drawThumbnails} from './thumbnails.js';
+import {getAllThumbnails} from './thumbnails.js';
 
-drawThumbnails(getPictures());
+getAllThumbnails(getPictures());
 
