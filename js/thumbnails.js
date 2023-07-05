@@ -1,3 +1,5 @@
+import { showBigPictures } from './show-big-pictures.js';
+
 const picturesContainer = document.querySelector('.pictures'); //Находит тег с классом в разметке (DOM-element)
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture'); //Находит шаблон по id и через content его содержимое
 
@@ -11,6 +13,10 @@ const makeOneThumbnail = ({ comments, description, likes, url }) => { //Мето
   thumbnailPictureImg.alt = description;
   thumbnail.querySelector('.picture__comments').textContent = comments.length; //Указывает количество комментариев
   thumbnail.querySelector('.picture__likes').textContent = likes;
+  thumbnail.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    showBigPictures(); //callback
+  });
 
   return thumbnail;
 };
