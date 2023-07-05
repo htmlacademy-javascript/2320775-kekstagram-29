@@ -1,23 +1,37 @@
-const bigPicture = document.querySelector('.big-picture');
+const bigPicture = document.querySelector('.big-picture'); //<section class="big-picture overlay hidden">
+const bigPictureImage = bigPicture.querySelector('.big-picture__img'); //<div class="big-picture__img">
+const closeButton = bigPicture.querySelector('.big-picture__cancel'); //<button class="big-picture__cancel cancel">
 
 
+const openBigPicture = () => { //Открывает большое изображение
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  closeButton.addEventListener('click', onDocumentClick);
+  document.addEventLictener('keydown', onDocumentKeydown);
+};
 
+const closeBigPicture = () => { //закрывает большое изображение
+  bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  closeButton.removeEventListener('click', onDocumentClick);
+  document.removeEventLictener('keydown', onDocumentKeydown);
+};
 
-// <!-- Полноэкранный показ изображения -->
-// <section class="big-picture  overlay  hidden">
-//   <h2 class="big-picture__title  visually-hidden">Просмотр фотографии</h2>
-//   <div class="big-picture__preview">
+const onDocumentClick = (evt) => {
+  evt.preventDefault();
+  closeBigPicture();
+};
 
-//     <!-- Просмотр изображения -->
-//     <div class="big-picture__img">
-//       <img src="img/logo-background-3.jpg" alt="Девушка в купальнике" width="600" height="600">
-//     </div>
+const onDocumentKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+};
 
-/* <li class="social__comment">
-    <img
-        class="social__picture"
-        src="{{аватар}}"
-        alt="{{имя комментатора}}"
-        width="35" height="35">
-    <p class="social__text">{{текст комментария}}</p>
-</li> */
+const makeBigPicture = () => {
+  openBigPicture();
+  closeBigPicture();
+};
+
+export { makeBigPicture };
