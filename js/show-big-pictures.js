@@ -1,10 +1,9 @@
 //1. Открытие-закрытие окна с картинкой
 const bigPicture = document.querySelector('.big-picture'); //<section class="big-picture overlay hidden">
-const closeButton = bigPicture.querySelector('.big-picture__cancel'); //<button class="big-picture__cancel cancel">
+const closeButton = bigPicture.querySelector('.big-picture__cancel'); //<button type="reset" class="big-picture__cancel  cancel" id="picture-cancel">Закрыть</button>
 
-//2. Добавление информации к окну с картинкой
+//2. Добавление информации к большой картинке при открытии окна
 const bigPictureImage = bigPicture.querySelector('.big-picture__img img'); //<div class="big-picture__img">
-const bigPictureSocial = bigPicture.querySelector('.big-picture__social'); //<div class="big-picture__social  social">
 const likesCount = bigPicture.querySelector('.likes-count'); //<class="social__likes">Нравится <span class="likes-count">356</span>
 const socialCommentsCount = bigPicture.querySelector('.social__comment-count'); //<div class="social__comment-count">5 из <span class="comments-count">125</span>комментариев</div>
 const socialCommentsList = bigPicture.querySelector('.social__comments'); //<ul class="social__comments">
@@ -12,7 +11,7 @@ const socialCommentsItem = bigPicture.querySelector('.social__comment'); //<li c
 const socialCommentsLoader = bigPicture.querySelector('.comments-loader'); //<button type="button" class="social__comments-loader comments-loader">Загрузить еще</button>
 const socialCommentCaption = bigPicture.querySelector('.social__caption'); //<p class="social__caption">Тестим новую камеру! =)</p>
 
-//1.
+//1. Открытие-закрытие окна с картинкой
 const openBigPicture = () => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -35,19 +34,19 @@ const closeButtonOnDocumentClick = (evt) => { //Удаляет обработч�
   closeBigPicture();
 };
 
+//Вынос за пределы функций для линтера
 closeButton.addEventListener('click', closeButtonOnDocumentClick);
 document.addEventListener('keydown', closeButtonOnDocumentKeydown);
 
-const fillBigPictureImage = (data) => {
+//2. Добавление информации к большой картинке при открытии окна
+const fillBigPictureImage = (data) => { //Заполняет одну картинку данными из thumbmail
   bigPictureImage.src = data.url;
   bigPictureImage.alt = data.description;
   likesCount.textContent = data.likes;
   socialCommentCaption.textContent = data.description;
 };
 
-//2.
-
-const fillCommentElement = (element) => {
+const fillCommentElement = (element) => { //Получает 1 комментарий и заполняет картинку (из create-comment в data.js)
   const comment = socialCommentsItem.cloneNode(true);
   const socialPictureAvatar = comment.querySelector('.social__picture');//<img class="social__picture" src="img/avatar-1.svg" alt="Аватар автора фотографии">
   socialPictureAvatar.src = element.avatar;
@@ -56,8 +55,8 @@ const fillCommentElement = (element) => {
   return comment;
 };
 
-const fillCommentsList = (data) => {
-  data.forEach((element) => socialCommentsList.append(fillCommentElement(element)));
+const fillCommentsList = (data) => { //Перебирает массив объектов с комментариями
+  data.forEach((element) => socialCommentsList.append(fillCommentElement(element))); //заполняет список комментов UL элементами LI с описанием
 };
 
 // Прячет .social__comment-count и .comments-loader через .hidden
@@ -68,11 +67,11 @@ const hideTemporaryElements = () => {
 
 //Вывод
 const showBigPictures = (data) => {
-  socialCommentsList.innerHTML = '';
-  openBigPicture();
-  fillBigPictureImage(data);
-  fillCommentsList(data.comments);
-  hideTemporaryElements();
+  socialCommentsList.innerHTML = ''; //Очищает спискок выводимых комментариев при каждом открытии
+  openBigPicture(); //Открывает окно с картинкой
+  fillBigPictureImage(data); //Заполняет её данными
+  fillCommentsList(data.comments); //Заполняет комментариями
+  hideTemporaryElements(); //Прячет временно скрытые объекты
 };
 
 export { showBigPictures };
