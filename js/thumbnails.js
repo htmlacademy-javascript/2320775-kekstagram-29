@@ -15,7 +15,7 @@ const makeOneThumbnail = ({ comments, description, likes, url }) => { //Мето
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.addEventListener('click', (evt) => {
     evt.preventDefault();
-    showBigPictures({ url, description }); //callback
+    showBigPictures({ comments, description, likes, url }); //callback
   });
 
   return thumbnail;

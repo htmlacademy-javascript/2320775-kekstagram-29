@@ -3,14 +3,15 @@ const bigPicture = document.querySelector('.big-picture'); //<section class="big
 const closeButton = bigPicture.querySelector('.big-picture__cancel'); //<button class="big-picture__cancel cancel">
 
 //2. Добавление информации к окну с картинкой
-const bigPictureImage = bigPicture.querySelector('.big-picture__img'); //<div class="big-picture__img">
+const bigPictureImage = bigPicture.querySelector('.big-picture__img img'); //<div class="big-picture__img">
 const bigPictureSocial = bigPicture.querySelector('.big-picture__social'); //<div class="big-picture__social  social">
 const likesCount = bigPicture.querySelector('.likes-count'); //<class="social__likes">Нравится <span class="likes-count">356</span>
 const socialCommentsCount = bigPicture.querySelector('.comments-count'); //<div class="social__comment-count">5 из <span class="comments-count">125</span>комментариев</div>
 const socialCommentsList = bigPicture.querySelector('.social__comments'); //<ul class="social__comments">
+const socialCommentsItem = bigPicture.querySelector('.social__comment'); //<li class="social__comment">
 const socialCommentsLoader = bigPicture.querySelector('.comments-loader'); //<button type="button" class="social__comments-loader comments-loader">Загрузить еще</button>
 
-
+//1.
 const openBigPicture = () => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -39,12 +40,36 @@ document.addEventListener('keydown', closeButtonOnDocumentKeydown);
 const fillBigPictureImage = (data) => {
   bigPictureImage.src = data.url;
   bigPictureImage.alt = data.description;
+  likesCount.textContent = data.likes;
 };
 
+//2.
+
+const fillCommentElement = (element) => {
+  const comment = socialCommentsItem.cloneNode(true);
+  const bigPictureSocialAvatar = comment.querySelector('.social__picture');//<img class="social__picture" src="img/avatar-1.svg" alt="Аватар автора фотографии">
+  bigPictureSocial.src = element.avatar;
+  bigPictureSocial.alt = element.name;
+  comment.querySelector('.social__text').textContent = element.message; //<p class="social__text">Мега фото!</p>
+  return comment;
+};
+
+const fillCommentsList = (data) => {
+  data.forEach((element) => socialCommentsList.append(fillCommentElement(element)));
+};
+
+// Прячет .social__comment-count и .comments-loader через .hidden
+const hideTemporaryElements = () => {
+  socialCommentsLoader.classList.add('hidden');
+  socialCommentsCount.classList.add('hidden');
+};
+
+//Вывод
 const showBigPictures = (data) => {
   openBigPicture();
   fillBigPictureImage(data);
-
+  fillCommentsList(data.comments);
+  hideTemporaryElements();
 };
 
 export { showBigPictures };
