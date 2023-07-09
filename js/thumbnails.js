@@ -13,6 +13,7 @@ const makeOneThumbnail = ({ comments, description, likes, url }) => { //Мето
   thumbnailPictureImg.alt = description;
   thumbnail.querySelector('.picture__comments').textContent = comments.length; //Указывает количество комментариев
   thumbnail.querySelector('.picture__likes').textContent = likes;
+
   thumbnail.addEventListener('click', (evt) => {
     evt.preventDefault();
     showBigPictures({ comments, description, likes, url }); //callback
