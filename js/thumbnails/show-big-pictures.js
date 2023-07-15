@@ -15,9 +15,9 @@ const socialCommentsLoader = bigPicture.querySelector('.comments-loader'); //<bu
 const socialCommentsCount = bigPicture.querySelector('.social__comment-count'); //<div class="social__comment-count">5 из <span class="comments-count">125</span> комментариев</div>
 
 let showCommentsCount = 0;
-let comments;
+let comments; //Создаём переменную, в которую при открытии окна с изображением добавляется data.comments из thumbnails
 
-//Заполняет строку ю.social__comment-count данными
+//Заполняет строку .social__comment-count данными
 const fillCommentsCounter = () => {
   socialCommentsCount.innerHTML = `${showCommentsCount} из <span class="comments-count">${comments.length}</span> комментариев`;
 };
@@ -31,11 +31,11 @@ const setButtonState = () => {
   socialCommentsLoader.classList.remove('hidden');
 };
 
-//Создаёт и заполняет один комментарий информацией (из create-comment в data.js)
+//Создаёт и заполняет один комментарий информацией
 const fillCommentElement = (element) => {
-  const comment = socialCommentsItem.cloneNode(true); //Клонирует <li>
+  const comment = socialCommentsItem.cloneNode(true); //Клонирует <li class="social__comment">
   const socialPictureAvatar = comment.querySelector('.social__picture');//<img class="social__picture" src="img/avatar-1.svg" alt="Аватар автора фотографии">
-  socialPictureAvatar.src = element.avatar;
+  socialPictureAvatar.src = element.avatar; //Подставляет значения из create-comment в data.js
   socialPictureAvatar.alt = element.name;
   comment.querySelector('.social__text').textContent = element.message; //<p class="social__text">Мега фото!</p>
   return comment;
@@ -43,11 +43,11 @@ const fillCommentElement = (element) => {
 
 //Рендерит список комментариев
 const renderComments = () => {
-  const fragment = document.createDocumentFragment();
-  const currentComments = comments.slice(showCommentsCount, showCommentsCount + COMMENTS_COUNTER);
-  showCommentsCount = Math.min(showCommentsCount + COMMENTS_COUNTER, comments.length);
-  currentComments.forEach((comment) => fragment.append(fillCommentElement(comment)));
-  socialCommentsList.append(fragment);
+  const fragment = document.createDocumentFragment(); //Добавит фрагмент
+  const currentComments = comments.slice(showCommentsCount, showCommentsCount + COMMENTS_COUNTER); //Обрезает все комментарии с 0 по 5
+  showCommentsCount = Math.min(showCommentsCount + COMMENTS_COUNTER, comments.length); //Показывает либо от 0 до 5, либо минимальное в длине если там меньше 5
+  currentComments.forEach((comment) => fragment.append(fillCommentElement(comment))); //Обрезанный массив пропускает через цикл и добавляем во фрагмент каждый комментарий
+  socialCommentsList.append(fragment); //Добавляет на страницу в DOM в <ul>
   setButtonState();
   fillCommentsCounter();
 };

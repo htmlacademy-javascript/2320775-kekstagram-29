@@ -1,6 +1,6 @@
 //модуль отвечает за генерацию временных данных для разработки  проекта.
 
-import { getRandomInteger, getRandomArrayElement, createIdGenerator } from './utils.js';
+import { getRandomInteger, getRandomArrayElement, createIdGenerator } from '../utils/utils.js';
 
 const LIKES_MIN = 15;
 const LIKES_MAX = 200;
