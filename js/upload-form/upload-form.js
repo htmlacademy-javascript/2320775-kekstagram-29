@@ -1,6 +1,7 @@
 import { initScale, resetScale } from './scale.js';
+import { initValidation, validatePristine, resetPristine } from './form-validation.js';
 
-const uploadForm = document.querySelector('.img-upload__form');
+const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadInput = document.querySelector('.img-upload__input');//<input type="file" id="upload-file" class="img-upload__input visually-hidden" name="filename" required> Загрузить
 const imgUploadOverlay = document.querySelector('.img-upload__overlay'); //Форма редактирования изображения <div class="img-upload__overlay hidden">
 const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<button type="reset" class="img-upload__cancel cancel" id="upload-cancel">Закрыть</button>
@@ -14,8 +15,9 @@ const openUploadForm = () => {
 
 //Закрывает форму загрузки изображения
 const closeUploadForm = () => {
-  uploadForm.reset();
+  imgUploadForm.reset();
   resetScale();
+  resetPristine(); //Сброс полей формы
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
@@ -24,7 +26,9 @@ const closeUploadForm = () => {
 const onImgUploadInputChange = () => openUploadForm();
 const onImgUploadCancelButtonClick = () => closeUploadForm();
 const onUploadFormSubmit = (evt) => {
-  evt.preventDefault();
+  if (!validatePristine()) {
+    evt.preventDefault();
+  }
 };
 
 function onCloseButtonKeydown (evt) {
@@ -36,9 +40,10 @@ function onCloseButtonKeydown (evt) {
 
 //Вывод
 const initUploadForm = () => {
+  initValidation();
   initScale();
   imgUploadInput.addEventListener('change', onImgUploadInputChange);
-  uploadForm.addEventListener('submit', onUploadFormSubmit);
+  imgUploadForm.addEventListener('submit', onUploadFormSubmit);
   imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
 };
 
