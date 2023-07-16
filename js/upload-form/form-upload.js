@@ -1,10 +1,15 @@
-import { initScale, resetScale } from './scale.js';
+import { initScale, resetScale } from './scale-change.js';
+import { initEffects, updateEffects } from './effects-overlay.js';
 import { initValidation, validatePristine, resetPristine } from './form-validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadInput = document.querySelector('.img-upload__input');//<input type="file" id="upload-file" class="img-upload__input visually-hidden" name="filename" required> Загрузить
 const imgUploadOverlay = document.querySelector('.img-upload__overlay'); //Форма редактирования изображения <div class="img-upload__overlay hidden">
 const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<button type="reset" class="img-upload__cancel cancel" id="upload-cancel">Закрыть</button>
+const effectsList = document.querySelector('.effects__list'); //Блок "Наложение эффекта на изображение" список <ul class="effects__list">
+const currentEffectValue = effectsList.querySelector('input:checked').value; //Находит value конкретного чекбокса
+
+const onEffectListChange = (evt) => updateEffects(evt.target.value); //Запускается когда меняется значение чекбокса
 
 //Открывает форму загрузки изображения
 const openUploadForm = () => {
@@ -18,6 +23,7 @@ const closeUploadForm = () => {
   imgUploadForm.reset();
   resetScale();
   resetPristine(); //Сброс полей формы
+  updateEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
@@ -42,6 +48,8 @@ function onCloseButtonKeydown (evt) {
 const initUploadForm = () => {
   initValidation();
   initScale();
+  initEffects(currentEffectValue); //Передаёт чекнутый чекбокс
+  effectsList.addEventListener('change', onEffectListChange);
   imgUploadInput.addEventListener('change', onImgUploadInputChange);
   imgUploadForm.addEventListener('submit', onUploadFormSubmit);
   imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
