@@ -1,5 +1,5 @@
 import { initScale, resetScale } from './scale-change.js';
-import { initEffects, updateEffects } from './effects-overlay.js';
+import { initEffects } from './effects-overlay.js';
 import { initValidation, validatePristine, resetPristine } from './form-validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
@@ -9,7 +9,7 @@ const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<
 const effectsList = document.querySelector('.effects__list'); //Блок "Наложение эффекта на изображение" список <ul class="effects__list">
 const currentEffectValue = effectsList.querySelector('input:checked').value; //Находит value конкретного чекбокса
 
-const onEffectListChange = (evt) => updateEffects(evt.target.value); //Запускается когда меняется значение чекбокса
+const onEffectListChange = (evt) => initEffects(evt.target.value); //Запускает когда меняется значение чекбокса
 
 //Открывает форму загрузки изображения
 const openUploadForm = () => {
@@ -23,7 +23,7 @@ const closeUploadForm = () => {
   imgUploadForm.reset();
   resetScale();
   resetPristine(); //Сброс полей формы
-  updateEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
+  initEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
