@@ -1,5 +1,6 @@
 import { initScale, resetScale } from './scale-change.js';
 import { initEffects } from './effects-overlay.js';
+import { sendData } from '../utils/api.js';
 import { initValidation, validatePristine, resetPristine } from './form-validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
