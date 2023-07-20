@@ -54,20 +54,8 @@ const imgUploadEffectLevel = document.querySelector('.img-upload__effect-level')
 const effectLevelValue = document.querySelector('.effect-level__value'); //<input class="effect-level__value" type="number" step="any" name="effect-level" value="">
 const effectLevelSlider = document.querySelector('.effect-level__slider'); //<div class="effect-level__slider"> в fildsete <fieldset class="img-upload__effect-level">
 
-const updateSliderHandler = (filter, unit) => { //Принимает имя эффекта и юнит
-  if (effectLevelSlider.noUiSlider) {
-    effectLevelSlider.noUiSlider.off('update');
-  }
-
-  effectLevelSlider.noUiSlider.on('update', () => {
-    const value = effectLevelSlider.noUiSlider.get();
-    imgUploadPreview.style.filter = `${filter}(${value}${unit})`; //Шаблонная строка добавляет атрибут style диву .img-upload__preview, напр. style="filter: invert(34%)"
-    effectLevelValue.value = value; //Берёт значение из noUiSlider-ползунка и записывает в див, так как input скрыт
-  });
-};
-
 const setContainerState = (value) => {
-  if (value === 'none') {
+  if (value === 'none' || !value) {
     imgUploadEffectLevel.classList.add('hidden'); //Скрывает ползунок и его контейнер, если value none, выбран эффект original
     imgUploadPreview.style.filter = 'none';
     return;
@@ -75,12 +63,10 @@ const setContainerState = (value) => {
   imgUploadEffectLevel.classList.remove('hidden');
 };
 
-//Инициализация слайдера
-const initEffects = (value) => { //Получает value чекнутого чекбокса
-  const { filter, min, max, step, unit } = EFFECTS[value] || EFFECTS.original; //Ищет эффект
-
-  setContainerState(value);
-
+//Создаёт слайдер
+const createSlider = (data) => {
+  const { filter, min, max, step, unit } = EFFECTS[data] || EFFECTS.original; //Ищет эффект
+  setContainerState(data);
   noUiSlider.create(effectLevelSlider, { //Создаёт слайдер на основе дива из разметки
     range: { //Настройки берёт из объекта
       min,
@@ -91,31 +77,19 @@ const initEffects = (value) => { //Получает value чекнутого ч�
     connect: 'lower',
   });
 
-
-  updateSliderHandler(filter, unit);
-};
-
-//Обновление эффектов слайдера
-const updateEffects = (value) => {
-  setContainerState(value);
-
-  if (value === 'none') {
-    return;
-  }
-
-  const { filter, min, max, step, unit } = EFFECTS[value] || EFFECTS.original;
-
-  effectLevelSlider.noUiSlider.updateOptions({
-    range: { //Настройки берёт из объекта
-      min,
-      max,
-    },
-    step,
-    start: max,
+  effectLevelSlider.noUiSlider.on('update', () => {
+    const value = effectLevelSlider.noUiSlider.get();
+    imgUploadPreview.style.filter = `${filter}(${value}${unit})`; //Шаблонная строка добавляет атрибут style диву .img-upload__preview, напр. style="filter: invert(34%)"
+    effectLevelValue.value = value; //Берёт значение из noUiSlider-ползунка и записывает в див, так как input скрыт
   });
-
-  updateSliderHandler(filter, unit);
-
 };
 
-export { initEffects, updateEffects };
+//Инициализация эффектов слайдера
+const initEffects = (data) => {
+  if (effectLevelSlider.noUiSlider) {
+    effectLevelSlider.noUiSlider.destroy();
+  }
+  createSlider(data);
+};
+
+export { initEffects };

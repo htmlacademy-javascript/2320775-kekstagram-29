@@ -1,5 +1,7 @@
 import { initScale, resetScale } from './scale-change.js';
-import { initEffects, updateEffects } from './effects-overlay.js';
+import { initEffects } from './effects-overlay.js';
+import { sendData } from '../utils/api.js';
+import { showMessage } from './alert-messages.js';
 import { initValidation, validatePristine, resetPristine } from './form-validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
@@ -8,8 +10,16 @@ const imgUploadOverlay = document.querySelector('.img-upload__overlay'); //Фо�
 const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<button type="reset" class="img-upload__cancel cancel" id="upload-cancel">Закрыть</button>
 const effectsList = document.querySelector('.effects__list'); //Блок "Наложение эффекта на изображение" список <ul class="effects__list">
 const currentEffectValue = effectsList.querySelector('input:checked').value; //Находит value конкретного чекбокса
+const imgUploadSubmit = document.querySelector('.img-upload__submit');
 
-const onEffectListChange = (evt) => updateEffects(evt.target.value); //Запускается когда меняется значение чекбокса
+const SEND_URL = 'https://29.javascript.pages.academy/kekstagram';
+const SUCCESS_MESSAGE = 'Изображение успешно загружено';
+const ERROR_MESSAGE = 'Ошибка загрузки файла';
+const ERROR_BUTTON_MESSAGE = 'Попробовать снова';
+
+const onEffectListChange = (evt) => {
+  initEffects(evt.target.value); //Запускает когда меняется значение чекбокса
+};
 
 //Открывает форму загрузки изображения
 const openUploadForm = () => {
@@ -23,7 +33,7 @@ const closeUploadForm = () => {
   imgUploadForm.reset();
   resetScale();
   resetPristine(); //Сброс полей формы
-  updateEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
+  initEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
@@ -31,16 +41,32 @@ const closeUploadForm = () => {
 
 const onImgUploadInputChange = () => openUploadForm();
 const onImgUploadCancelButtonClick = () => closeUploadForm();
-const onUploadFormSubmit = (evt) => {
-  if (!validatePristine()) {
-    evt.preventDefault();
-  }
-};
 
 function onCloseButtonKeydown (evt) {
   if (evt.key === 'Escape' && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags')) {//Исключает поля ввода комментов и хэштегов при нажатии esc
     evt.preventDefault();
     closeUploadForm();
+  }
+}
+
+//Передаёт сообщение об успехе
+const successUpload = () => {
+  closeUploadForm();
+  showMessage('success', SUCCESS_MESSAGE);
+};
+
+//Передаёт сообщение об ошибке
+const errorUpload = () => {
+  showMessage('error', ERROR_MESSAGE, ERROR_BUTTON_MESSAGE);
+};
+
+async function onUploadFormSubmitClick(evt) {
+  evt.preventDefault();
+
+  if (validatePristine()) {
+    imgUploadSubmit.disabled = true;
+    await sendData(SEND_URL, new FormData(evt.target), successUpload, errorUpload); //Принимает url, тело формы, два колбэка ошибки успеха и ошибки
+    imgUploadSubmit.disabled = false;
   }
 }
 
@@ -51,7 +77,7 @@ const initUploadForm = () => {
   initEffects(currentEffectValue); //Передаёт чекнутый чекбокс
   effectsList.addEventListener('change', onEffectListChange);
   imgUploadInput.addEventListener('change', onImgUploadInputChange);
-  imgUploadForm.addEventListener('submit', onUploadFormSubmit);
+  imgUploadForm.addEventListener('submit', onUploadFormSubmitClick);
   imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
 };
 
