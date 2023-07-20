@@ -11,9 +11,11 @@ const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<
 const effectsList = document.querySelector('.effects__list'); //Блок "Наложение эффекта на изображение" список <ul class="effects__list">
 const currentEffectValue = effectsList.querySelector('input:checked').value; //Находит value конкретного чекбокса
 const imgUploadSubmit = document.querySelector('.img-upload__submit');
-const SEND_URL = 'https://29.javascript.pages.academy/kekstagram/data';
+
+const SEND_URL = 'https://29.javascript.pages.academy/kekstagram';
 const SUCCESS_MESSAGE = 'Изображение успешно загружено';
 const ERROR_MESSAGE = 'Ошибка загрузки файла';
+const ERROR_BUTTON_MESSAGE = 'Попробовать снова';
 
 const onEffectListChange = (evt) => {
   initEffects(evt.target.value); //Запускает когда меняется значение чекбокса
@@ -39,11 +41,6 @@ const closeUploadForm = () => {
 
 const onImgUploadInputChange = () => openUploadForm();
 const onImgUploadCancelButtonClick = () => closeUploadForm();
-// const onUploadFormSubmit = (evt) => {
-//   if (!validatePristine()) {
-//     evt.preventDefault();
-//   }
-// };
 
 function onCloseButtonKeydown (evt) {
   if (evt.key === 'Escape' && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags')) {//Исключает поля ввода комментов и хэштегов при нажатии esc
@@ -52,28 +49,15 @@ function onCloseButtonKeydown (evt) {
   }
 }
 
-// const set = (state) => {
-//   imgUploadSubmit.disabled = state;
-// };
-
-// const successUpload = () => {
-//   showMessage('success');
-//   closeUploadForm();
-//   set(false);
-// };
-
-// const errorUpload = () => {
-//   showMessage('error');
-//   set(false);
-// };
-
+//Передаёт сообщение об успехе
 const successUpload = () => {
-  showMessage('success', SUCCESS_MESSAGE, false);
   closeUploadForm();
+  showMessage('success', SUCCESS_MESSAGE);
 };
 
+//Передаёт сообщение об ошибке
 const errorUpload = () => {
-  showMessage('error', ERROR_MESSAGE, true);
+  showMessage('error', ERROR_MESSAGE, ERROR_BUTTON_MESSAGE);
 };
 
 async function onUploadFormSubmitClick(evt) {
@@ -81,7 +65,7 @@ async function onUploadFormSubmitClick(evt) {
 
   if (validatePristine()) {
     imgUploadSubmit.disabled = true;
-    await sendData(SEND_URL, new FormData(evt.target), successUpload, errorUpload);
+    await sendData(SEND_URL, new FormData(evt.target), successUpload, errorUpload); //Принимает url, тело формы, два колбэка ошибки успеха и ошибки
     imgUploadSubmit.disabled = false;
   }
 }

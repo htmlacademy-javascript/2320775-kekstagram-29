@@ -1,34 +1,63 @@
-const createMessage = (type, text, buttonState) => (
+let message;
+let isOpen = false;
+
+//Создаёт DOM-элемент со строкой
+const createElement = (template) => {
+  const div = document.createElement('div');
+  div.innerHTML = template;
+  return div.firstChild;
+};
+
+const createMessage = (type, text, buttonText) => (
   `<section class="${type}">
     <div class="${type}__inner">
       <h2 class="${type}__title">${text}</h2>
-      ${buttonState ? `<button type="button" class="${type}__button">Попробовать ещё раз</button>` : ''}
+      ${buttonText ? `<button type="button" class="${type}__button">${buttonText}</button>` : ''}
     </div>
   </section>`
 );
 
-const showMessage = (messageType, messageText, btnState) => {
-  let message = createMessage(messageType, messageText, btnState);
-  document.body.insertAdjacentHTML('beforeend', message);
+const onDocumentKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    evt.stopPropagation();
+    evt.preventDefault();
+    closeMessage();
+  }
+};
 
-  message = document.querySelector(`.${messageType}`);
+function closeMessage() {
+  message.remove();
+  document.removeEventListener('keydown', onDocumentKeydown);
+
+  if(!isOpen) {
+    document.body.classList.remove('modal-open');
+  }
+}
+
+const showMessage = (type, text, buttonText) => {
+  isOpen = false;
+  message = createElement(createMessage(type, text, buttonText));
+  document.body.append(message);
+
   message.addEventListener('click', (evt) => {
-    if (!evt.target.closest(`.${messageType}__inner`)) {
+    if (!evt.target.closest(`.${type}__inner`)) {
       evt.preventDefault();
-      message.remove();
+      closeMessage();
     }
   });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.stopPropagation();
-      evt.preventDefault();
-      message.remove();
-    }
-  }, {capture: true, once: true});
-  if (btnState) {
-    const messageButton = message.querySelector(`.${messageType}__button`);
-    messageButton.addEventListener('click', () => message.remove());
+
+  document.addEventListener('keydown', onDocumentKeydown);
+
+  if (buttonText) {
+    message.querySelector(`.${type}__button`).addEventListener('click', closeMessage);
   }
+
+  if(!document.body.classList.contains('modal-open')) {
+    document.body.classList.add('modal-open');
+    return;
+  }
+
+  isOpen = true;
 };
 
 export { showMessage };
