@@ -1,7 +1,7 @@
 let message;
 let isOpen = false;
 
-//Создаёт DOM-элемент со строкой
+//Создаёт DOM-элемент со строкой ниже
 const createElement = (template) => {
   const div = document.createElement('div');
   div.innerHTML = template;
@@ -52,7 +52,7 @@ const showMessage = (type, text, buttonText) => {
     message.querySelector(`.${type}__button`).addEventListener('click', closeMessage);
   }
 
-  if(!document.body.classList.contains('modal-open')) {
+  if(!document.body.classList.contains('modal-open')) { //Для того, чтобы убрать скролл под окном
     document.body.classList.add('modal-open');
     return;
   }
