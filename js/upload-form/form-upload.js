@@ -12,10 +12,15 @@ const effectsList = document.querySelector('.effects__list'); //Блок "Нал
 const currentEffectValue = effectsList.querySelector('input:checked').value; //Находит value конкретного чекбокса
 const imgUploadSubmit = document.querySelector('.img-upload__submit');
 
+//Предварительный просмотр изображения
+const imgUploadPreview = document.querySelector('.img-upload__preview img'); // <div class="img-upload__preview">
+const effectsPreview = document.querySelector('.effects__preview'); //<span class="effects__preview
+
 const SEND_URL = 'https://29.javascript.pages.academy/kekstagram';
 const SUCCESS_MESSAGE = 'Изображение успешно загружено';
 const ERROR_MESSAGE = 'Ошибка загрузки файла';
 const ERROR_BUTTON_MESSAGE = 'Попробовать снова';
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const onEffectListChange = (evt) => {
   initEffects(evt.target.value); //Запускает когда меняется значение чекбокса
@@ -39,7 +44,6 @@ const closeUploadForm = () => {
   document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
 };
 
-const onImgUploadInputChange = () => openUploadForm();
 const onImgUploadCancelButtonClick = () => closeUploadForm();
 
 function onCloseButtonKeydown (evt) {
@@ -69,6 +73,26 @@ async function onUploadFormSubmitClick(evt) {
     imgUploadSubmit.disabled = false;
   }
 }
+
+//Проверяет валидность загружаемого файла c изображением
+const isValidType = (file) => {
+  const fileName = file.name.toLowerCase();
+  return FILE_TYPES.some((it) => fileName.endsWith(it));
+};
+
+//Тут магия
+const onFileInputChange = (evt) => {
+  const file = URL.createObjectURL(evt.target.files[0]);
+  imgUploadPreview.src = file;
+  effectsPreview.forEach((effect) => (effect.style.backgroundImage = `url('${imgUploadPreview.src}')`));
+};
+
+const onImgUploadInputChange = (evt) => {
+  if (isValidType) {
+    openUploadForm();
+    onFileInputChange(evt);
+  }
+};
 
 //Вывод
 const initUploadForm = () => {
