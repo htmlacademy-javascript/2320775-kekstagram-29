@@ -1,9 +1,8 @@
-import { getThumbnails } from './get-thumbnails.js';
+import { makeAllThumbnails } from './thumbnails.js';
 import { getRandomInteger } from '../utils/utils.js';
 
-
 const RANDOM_IMAGES_COUNT = 10; //Случайные — 10 случайных, не повторяющихся фотографий.
-const DELAY = 1000;
+const DELAY = 500;
 const FILTERS = {
   random: 'filter-random', //<button type=button class="img-filters__button" id="filter-random">Случайные</button>
   discussed: 'filter-discussed' //<button type=button class="img-filters__button" id="filter-discussed">Обсуждаемые</button>
@@ -41,7 +40,7 @@ const getFilterinData = (id, data) => {
 
 const renderFilteringPictures = (filter, data) => {
   picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
-  getThumbnails(getFilterinData(filter, data));
+  makeAllThumbnails(getFilterinData(filter, data));
 };
 
 const initFilter = (data) => {

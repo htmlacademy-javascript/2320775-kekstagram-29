@@ -23,7 +23,7 @@ const makeOneThumbnail = ({ comments, description, likes, url }) => { //Мето
 };
 
 //3. Функция для получения отрисованных элементов
-const makeAllThumbnail = (pictures) => { //Принмает массив pictures
+const makeAllThumbnails = (pictures) => { //Принмает массив pictures
   const fragment = document.createDocumentFragment(); //Создание временного хранилища для элементов
   pictures.forEach((picture) => { //Цикл перебора данных массива picture
     const thumbnail = makeOneThumbnail(picture); //Создание одного DOM-элемента
@@ -33,4 +33,4 @@ const makeAllThumbnail = (pictures) => { //Принмает массив picture
   picturesContainer.append(fragment); //Добавляет созданный массив в DOM-дерево
 };
 
-export { makeAllThumbnail };
+export { makeAllThumbnails };

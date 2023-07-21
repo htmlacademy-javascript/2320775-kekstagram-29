@@ -1,4 +1,4 @@
-import { makeAllThumbnail } from './thumbnails.js';
+import { makeAllThumbnails } from './thumbnails.js';
 import { showMessage } from '../upload-form/alert-messages.js';
 import { getData } from '../utils/api.js';
 import { initFilter } from './filter.js';
@@ -10,7 +10,7 @@ const DELAY = 3000;
 
 const onGetSuccess = (data) => {
   initFilter(data); //в случае успешной загрузки данных запускает фильтр
-  makeAllThumbnail(data);
+  makeAllThumbnails(data);
 };
 
 const onGetError = () => {
