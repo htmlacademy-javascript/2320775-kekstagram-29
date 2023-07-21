@@ -31,6 +31,8 @@ const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onCloseButtonKeydown); //Добавляет обработчик события
+  effectsList.addEventListener('change', onEffectListChange);
+  imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
 };
 
 //Закрывает форму загрузки изображения
@@ -42,9 +44,14 @@ const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
+  effectsList.removeEventListener('change', onEffectListChange);
+  imgUploadCancelButton.removeEventListener('click', onImgUploadCancelButtonClick);
 };
 
-const onImgUploadCancelButtonClick = () => closeUploadForm();
+function onImgUploadCancelButtonClick (evt){
+  evt.preventDefault();
+  closeUploadForm();
+}
 
 function onCloseButtonKeydown (evt) {
   if (evt.key === 'Escape' && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags')) {//Исключает поля ввода комментов и хэштегов при нажатии esc
@@ -80,11 +87,11 @@ const isValidType = (file) => {
   return FILE_TYPES.some((it) => fileName.endsWith(it));
 };
 
-//Тут магия
+//Тут магия какая-то
 const onFileInputChange = (evt) => {
   const file = URL.createObjectURL(evt.target.files[0]);
   imgUploadPreview.src = file;
-  effectsPreview.forEach((effect) => (effect.style.backgroundImage = `url('${imgUploadPreview.src}')`));
+  effectsPreview.forEach((effect) => (effect.style.backgroundImage = `url(${file})`));
 };
 
 const onImgUploadInputChange = (evt) => {
@@ -99,10 +106,8 @@ const initUploadForm = () => {
   initValidation();
   initScale();
   initEffects(currentEffectValue); //Передаёт чекнутый чекбокс
-  effectsList.addEventListener('change', onEffectListChange);
   imgUploadInput.addEventListener('change', onImgUploadInputChange);
   imgUploadForm.addEventListener('submit', onUploadFormSubmitClick);
-  imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
 };
 
 export { initUploadForm };
