@@ -38,9 +38,9 @@ const getFilterinData = (id, data) => {
   }
 };
 
-const renderFilteringPictures = (filter, data) => {
+const renderFilteringPictures = (id, data) => {
   picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
-  makeAllThumbnails(getFilterinData(filter, data));
+  makeAllThumbnails(getFilterinData(id, data));
 };
 
 const initFilter = (data) => {
@@ -54,7 +54,7 @@ const initFilter = (data) => {
       clearTimeout(timeout); //Вместо debounse
 
       timeout = setTimeout(() => {
-        renderFilteringPictures(evt.target.filter, data);
+        renderFilteringPictures(evt.target.id, data);
       }, DELAY);
     }
   });

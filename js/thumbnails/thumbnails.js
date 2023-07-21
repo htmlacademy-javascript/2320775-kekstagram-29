@@ -5,32 +5,27 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 
 //1. Создание DOM-элемента
 //2. Наполнение шаблона данными
-const makeOneThumbnail = ({ comments, description, likes, url }) => { //Метод деструктуризации массива для 4х переменных
+const makeOneThumbnail = (item) => {
+  const template = pictureTemplate.cloneNode(true);
+  const img = template.querySelector('.picture__img');
+  const comments = template.querySelector('.picture__comments');
+  const likes = template.querySelector('.picture__likes');
 
-  const thumbnail = pictureTemplate.cloneNode(true); //Клонирует содержимого шаблона
-  const thumbnailPictureImg = thumbnail.querySelector('.picture__img');
-  thumbnailPictureImg.src = url; //Использует точечную нотацию для обращения к свойству
-  thumbnailPictureImg.alt = description;
-  thumbnail.querySelector('.picture__comments').textContent = comments.length; //Указывает количество комментариев
-  thumbnail.querySelector('.picture__likes').textContent = likes;
-
-  thumbnail.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    showBigPictures({ comments, description, likes, url }); //callback
+  img.src = item.url;
+  img.alt = item.description;
+  comments.textContent = item.comments.length;
+  likes.textContent = item.likes;
+  template.addEventListener('click', (event) => {
+    event.preventDefault();
+    showBigPictures(item);
   });
 
-  return thumbnail;
+  return template;
 };
 
 //3. Функция для получения отрисованных элементов
-const makeAllThumbnails = (pictures) => { //Принмает массив pictures
-  const fragment = document.createDocumentFragment(); //Создание временного хранилища для элементов
-  pictures.forEach((picture) => { //Цикл перебора данных массива picture
-    const thumbnail = makeOneThumbnail(picture); //Создание одного DOM-элемента
-    fragment.append(thumbnail); //ForEach принимает параметром функцию добавления элемента в хранилище
-  });
-
-  picturesContainer.append(fragment); //Добавляет созданный массив в DOM-дерево
+const makeAllThumbnails = (data) => {
+  data.forEach((item) => picturesContainer.append(makeOneThumbnail(item)));
 };
 
 export { makeAllThumbnails };
