@@ -24,9 +24,17 @@ const makeOneThumbnail = ({ comments, description, likes, url, id }) => { //Ме
 };
 
 //3. Функция для получения отрисованных элементов
-const makeAllThumbnails = (data) => {
-  data.forEach((element) => picturesContainer.append(makeOneThumbnail(element)));
+
+const makeAllThumbnails = (pictures) => { //Принмает массив pictures
+  const fragment = document.createDocumentFragment(); //Создание временного хранилища для элементов
+  pictures.forEach((picture) => { //Цикл перебора данных массива picture
+    const thumbnail = makeOneThumbnail(picture); //Создание одного DOM-элемента
+    fragment.append(thumbnail); //ForEach принимает параметром функцию добавления элемента в хранилище
+  });
+
+  picturesContainer.append(fragment); //Добавляет созданный массив в DOM-дерево
 };
+
 
 /* Второй вариант */
 // const makeAllThumbnails = (pictures) => {
@@ -41,14 +49,8 @@ const makeAllThumbnails = (data) => {
 // };
 
 /* Первый вариант */
-// const makeAllThumbnails = (pictures) => { //Принмает массив pictures
-//   const fragment = document.createDocumentFragment(); //Создание временного хранилища для элементов
-//   pictures.forEach((picture) => { //Цикл перебора данных массива picture
-//     const thumbnail = makeOneThumbnail(picture); //Создание одного DOM-элемента
-//     fragment.append(thumbnail); //ForEach принимает параметром функцию добавления элемента в хранилище
-//   });
-
-//   picturesContainer.append(fragment); //Добавляет созданный массив в DOM-дерево
+// const makeAllThumbnails = (data) => {
+//   data.forEach((element) => picturesContainer.append(makeOneThumbnail(element)));
 // };
 
 export { makeAllThumbnails };
