@@ -5,7 +5,7 @@ import { showMessage } from './alert-messages.js';
 import { initValidation, validatePristine, resetPristine } from './form-validation.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
-const imgUploadInput = document.querySelector('.img-upload__input');//<input type="file" id="upload-file" class="img-upload__input visually-hidden" name="filename" required> Загрузить
+const imgUploadInput = document.querySelector('.img-upload input[type=file]');//<input type="file" id="upload-file" class="img-upload__input visually-hidden" name="filename" required> Загрузить
 const imgUploadOverlay = document.querySelector('.img-upload__overlay'); //Форма редактирования изображения <div class="img-upload__overlay hidden">
 const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<button type="reset" class="img-upload__cancel cancel" id="upload-cancel">Закрыть</button>
 const effectsList = document.querySelector('.effects__list'); //Блок "Наложение эффекта на изображение" список <ul class="effects__list">
