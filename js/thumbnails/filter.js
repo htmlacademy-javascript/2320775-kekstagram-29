@@ -20,7 +20,7 @@ const sortByCommentsCount = (data) => (data.slice().sort((a, b) => b.comments.le
 const sortInRandomOrder = (data) => {
   const dataClone = data.slice();
   for (let i = dataClone.length - 1; i > 0; i--) {
-    const j = getRandomInteger(0, dataClone.length);
+    const j = getRandomInteger(data);
     [dataClone[i], dataClone[j]] = [dataClone[j], dataClone[i]];
   }
 

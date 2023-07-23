@@ -1,20 +1,13 @@
 //Модуль для вспомогательных функций и их экспорта в data.js
 
+const isEscapeEvent = (evt) => evt.key === 'Escape';
+
 //Функция для генерации случайного числа.
-const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-//Функция для генерации случайного элемента массива.
-const getRandomArrayElement = (elements) =>
-  elements[getRandomInteger(0, elements.length - 1)];
-
-//Функция для создания счётчика
-const createIdGenerator = () => {
-  let lastGeneratedId = 0;
-
-  return () => {
-    lastGeneratedId += 1;
-    return lastGeneratedId;
-  };
+const getRandomInteger = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 };
 
-export { getRandomInteger, getRandomArrayElement, createIdGenerator };
+export { getRandomInteger, isEscapeEvent };

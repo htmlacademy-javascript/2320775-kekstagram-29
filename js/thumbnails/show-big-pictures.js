@@ -1,4 +1,6 @@
 //Отображение комментариев по 5
+import { isEscapeEvent } from '../utils/utils.js';
+
 const COMMENTS_COUNTER = 5;
 
 //Открытие-закрытие окна с изображением
@@ -79,7 +81,7 @@ const closeBigPicture = () => {
 
 //Удаляет обработчик по кнопке при закрытии. Объявляется декларативно для обхода линтера
 function onCloseButtonKeydown (evt) {
-  if (evt.key === 'Escape' && !evt.target.closest('.social__footer-text')) { //<input type="text" class="social__footer-text" placeholder="Ваш комментарий...">
+  if (isEscapeEvent(evt) && !evt.target.closest('.social__footer-text')) { //<input type="text" class="social__footer-text" placeholder="Ваш комментарий...">
     evt.preventDefault();
     closeBigPicture();
   }
