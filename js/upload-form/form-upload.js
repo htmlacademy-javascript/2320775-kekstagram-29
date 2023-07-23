@@ -16,26 +16,26 @@ const SUCCESS_BUTTON_MESSAGE = 'Круто!';
 const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 
 const imgUploadForm = document.querySelector('.img-upload__form');
-const imgUploadInput = document.querySelector('.img-upload input[type=file]');//<input type="file" id="upload-file" class="img-upload__input visually-hidden" name="filename" required> Загрузить
-const imgUploadOverlay = document.querySelector('.img-upload__overlay'); //Форма редактирования изображения <div class="img-upload__overlay hidden">
-const imgUploadCancelButton = document.querySelector('.img-upload__cancel'); //<button type="reset" class="img-upload__cancel cancel" id="upload-cancel">Закрыть</button>
-const effectsList = document.querySelector('.effects__list'); //Блок "Наложение эффекта на изображение" список <ul class="effects__list">
-const currentEffectValue = effectsList.querySelector('input:checked').value; //Находит value конкретного чекбокса
+const imgUploadInput = document.querySelector('.img-upload input[type=file]');
+const imgUploadOverlay = document.querySelector('.img-upload__overlay');
+const imgUploadCancelButton = document.querySelector('.img-upload__cancel');
+const effectsList = document.querySelector('.effects__list');
+const currentEffectValue = effectsList.querySelector('input:checked').value;
 const imgUploadSubmit = document.querySelector('.img-upload__submit');
 
 //Предварительный просмотр изображения
-const imgUploadPreview = document.querySelector('.img-upload__preview img'); // <div class="img-upload__preview">
-const effectsPreview = document.querySelectorAll('.effects__preview'); //<span class="effects__preview
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
+const effectsPreview = document.querySelectorAll('.effects__preview');
 
 const onEffectListChange = (evt) => {
-  initEffects(evt.target.value); //Запускает когда меняется значение чекбокса
+  initEffects(evt.target.value);
 };
 
 //Открывает форму загрузки изображения
 const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onCloseButtonKeydown); //Добавляет обработчик события
+  document.addEventListener('keydown', onCloseButtonKeydown);
   effectsList.addEventListener('change', onEffectListChange);
   imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
 };
@@ -44,16 +44,15 @@ const openUploadForm = () => {
 const closeUploadForm = () => {
   imgUploadForm.reset();
   resetScale();
-  resetPristine(); //Сброс полей формы
+  resetPristine();
   initEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onCloseButtonKeydown); //Удаляет обработчик события
+  document.removeEventListener('keydown', onCloseButtonKeydown);
   effectsList.removeEventListener('change', onEffectListChange);
   imgUploadCancelButton.removeEventListener('click', onImgUploadCancelButtonClick);
 };
 
-//Тут магия какая-то
 const onFileInputChange = (evt) => {
   const image = evt.target.files[0];
   const imageName = image.name.toLowerCase();
@@ -112,11 +111,10 @@ const onUploadFormSubmit = (evt) => {
   }
 };
 
-//Вывод
 const initUploadForm = () => {
   initValidation();
   initScale();
-  initEffects(currentEffectValue); //Передаёт чекнутый чекбокс
+  initEffects(currentEffectValue);
   effectsList.addEventListener('change', onEffectListChange);
   imgUploadInput.addEventListener('change', onUploadInputChange);
   imgUploadForm.addEventListener('submit', onUploadFormSubmit);
