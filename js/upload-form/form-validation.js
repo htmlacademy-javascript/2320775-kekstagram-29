@@ -1,23 +1,21 @@
-
 const HASHTAG_MAX_COUNT = 5;
-const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i; //Регулярное выражение для проверки строки
 
-const CHECK_COMMENT_LENGTH = `Комментарий не может быть больше ${COMMENT_MAX_LENGTH} символов.`;
-const CHECK_HASHTAGS_VALIDITY = 'Используйте валидный хэштег из букв/чисел, без пробелов/спецсимволов, и не более 19 знаков длиной.';
-const CHECK_HASHTAGS_COUNT = 'Нельзя указать более пяти хэштегов.';
-const CHECK_DOUBLE_HASHTAGS = 'Один и тот же хэштег не может быть использован дважды.';
+const CHECK_HASHTAGS_VALIDITY = 'Используйте валидные хэштеги не более 19 знаков в длину, разделённые пробелами, из букв/чисел, без спецсимволов';
+const CHECK_HASHTAGS_COUNT = 'Нельзя указывать более пяти хэштегов';
+const CHECK_DOUBLE_HASHTAGS = 'Один и тот же хэштег не может быть использован дважды';
 
 const imgUploadForm = document.querySelector('.img-upload__form'); //<form class="img-upload__form"
 const textHashtags = document.querySelector('.text__hashtags'); //Поле для хэштега
-const textDescription = document.querySelector('.text__description'); //Поле для комментария <textarea class="text__description"
+// const checkCommentLength = textDescription.dataset.pristineMaxlengthMessage;
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper', //Вешается на обе обёртки полей <div class="img-upload__field-wrapper">
   errorTextParent: 'img-upload__field-wrapper' //Куда выводится сообщение об ошибке
 });
 
-const checktextDescriptionLength = (value) => value.length <= COMMENT_MAX_LENGTH; //Возвращает true or false
+// const checktextDescriptionLength = (value) => value.length <= COMMENT_MAX_LENGTH; //Возвращает true or false
+
 const createHachtags = (value) => value.trim().toLowerCase().split(' ');
 //Обрезает пробелы тримом, приводит к нижнему регистру, сплитом создаёт массив
 
@@ -47,7 +45,7 @@ const resetPristine = () => pristine.reset(); //Использует метод 
 
 //Вывод валидатора (исп. 5 параметров: поле, колбэк проверки, текст ошибки, приоритет, прерывание)
 const initValidation = () => {
-  pristine.addValidator(textDescription, checktextDescriptionLength, CHECK_COMMENT_LENGTH, 1, true);
+  // pristine.addValidator(textDescription, checktextDescriptionLength, checkCommentLength, 1, true);
   pristine.addValidator(textHashtags, checkHashtagsValidity, CHECK_HASHTAGS_VALIDITY, 1, true);
   pristine.addValidator(textHashtags, checkHashtagsCount, CHECK_HASHTAGS_COUNT, 1, true);
   pristine.addValidator(textHashtags, checkHashtagsDouble, CHECK_DOUBLE_HASHTAGS, 1, true);
