@@ -1,3 +1,5 @@
+import { isEscapeEvent } from '../utils/utils.js';
+
 let message;
 let isOpen = false;
 
@@ -8,7 +10,7 @@ const createElement = (template) => {
   return div.firstChild;
 };
 
-const createMessage = (type, text, buttonText) => (
+const createMessage = (text, type, buttonText) => (
   `<section class="${type}">
     <div class="${type}__inner">
       <h2 class="${type}__title">${text}</h2>
@@ -18,12 +20,14 @@ const createMessage = (type, text, buttonText) => (
 );
 
 const onDocumentKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeEvent(evt)) {
     evt.stopPropagation();
     evt.preventDefault();
     closeMessage();
   }
 };
+
+const onCloseButtonClick = () => closeMessage();
 
 function closeMessage() {
   message.remove();
@@ -34,9 +38,9 @@ function closeMessage() {
   }
 }
 
-const showMessage = (type, text, buttonText) => {
+const showMessage = (text, type, buttonText) => {
   isOpen = false;
-  message = createElement(createMessage(type, text, buttonText));
+  message = createElement(createMessage(text, type, buttonText));
   document.body.append(message);
 
   message.addEventListener('click', (evt) => {
@@ -46,11 +50,11 @@ const showMessage = (type, text, buttonText) => {
     }
   });
 
-  document.addEventListener('keydown', onDocumentKeydown);
-
   if (buttonText) {
-    message.querySelector(`.${type}__button`).addEventListener('click', closeMessage);
+    message.querySelector(`.${type}__button`).addEventListener('click', onCloseButtonClick);
   }
+
+  document.addEventListener('keydown', onDocumentKeydown);
 
   if(!document.body.classList.contains('modal-open')) { //Для того, чтобы убрать скролл под окном
     document.body.classList.add('modal-open');

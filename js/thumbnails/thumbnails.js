@@ -35,22 +35,4 @@ const makeAllThumbnails = (pictures) => { //Принмает массив pictur
   picturesContainer.append(fragment); //Добавляет созданный массив в DOM-дерево
 };
 
-
-/* Второй вариант */
-// const makeAllThumbnails = (pictures) => {
-//   picturesContainer.querySelector('.picture').forEach((element) => element.remove());
-//   const fragment = document.createDocumentFragment();
-//   pictures.forEach((picture) => {
-//     const thumbnail = makeOneThumbnail(picture);
-//     fragment.append(thumbnail);
-//   });
-
-//   picturesContainer.append(fragment);
-// };
-
-/* Первый вариант */
-// const makeAllThumbnails = (data) => {
-//   data.forEach((element) => picturesContainer.append(makeOneThumbnail(element)));
-// };
-
 export { makeAllThumbnails };

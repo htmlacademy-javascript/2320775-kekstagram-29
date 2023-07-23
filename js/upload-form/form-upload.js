@@ -1,8 +1,19 @@
+import { isEscapeEvent } from '../utils/utils.js';
 import { initScale, resetScale } from './scale-change.js';
 import { initEffects } from './effects-overlay.js';
 import { sendData } from '../utils/api.js';
 import { showMessage } from './alert-messages.js';
 import { initValidation, validatePristine, resetPristine } from './form-validation.js';
+
+const SEND_URL = 'https://29.javascript.pages.academy/kekstagram';
+const SUCCESS_CLASS = 'success';
+const ERROR_CLASS = 'error';
+const SUCCESS_MESSAGE = 'Изображение успешно загружено';
+const ERROR_MESSAGE = 'Ошибка загрузки файла';
+const ERROR_BUTTON_MESSAGE = 'Попробовать ещё раз';
+const ERROR_FORMAT = 'Неверный формат файла';
+const SUCCESS_BUTTON_MESSAGE = 'Круто!';
+const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadInput = document.querySelector('.img-upload input[type=file]');//<input type="file" id="upload-file" class="img-upload__input visually-hidden" name="filename" required> Загрузить
@@ -14,13 +25,7 @@ const imgUploadSubmit = document.querySelector('.img-upload__submit');
 
 //Предварительный просмотр изображения
 const imgUploadPreview = document.querySelector('.img-upload__preview img'); // <div class="img-upload__preview">
-const effectsPreview = document.querySelector('.effects__preview'); //<span class="effects__preview
-
-const SEND_URL = 'https://29.javascript.pages.academy/kekstagram';
-const SUCCESS_MESSAGE = 'Изображение успешно загружено';
-const ERROR_MESSAGE = 'Ошибка загрузки файла';
-const ERROR_BUTTON_MESSAGE = 'Попробовать снова';
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const effectsPreview = document.querySelectorAll('.effects__preview'); //<span class="effects__preview
 
 const onEffectListChange = (evt) => {
   initEffects(evt.target.value); //Запускает когда меняется значение чекбокса
@@ -48,56 +53,62 @@ const closeUploadForm = () => {
   imgUploadCancelButton.removeEventListener('click', onImgUploadCancelButtonClick);
 };
 
+//Тут магия какая-то
+const onFileInputChange = (evt) => {
+  const image = evt.target.files[0];
+  const imageName = image.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((fileType) => imageName.endsWith(fileType));//Провярет сопадения окончаний
+
+  if (matches) {
+    const fileUrl = URL.createObjectURL(image);
+    imgUploadPreview.src = fileUrl;
+    effectsPreview.forEach((effect) => (effect.style.backgroundImage = `url(${fileUrl})`));
+    openUploadForm();
+    return;
+  }
+
+  showMessage(ERROR_FORMAT, ERROR_CLASS);
+};
+
+const onUploadInputChange = (evt) => onFileInputChange(evt);
+
 function onImgUploadCancelButtonClick (evt){
   evt.preventDefault();
   closeUploadForm();
 }
 
 function onCloseButtonKeydown (evt) {
-  if (evt.key === 'Escape' && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags')) {//Исключает поля ввода комментов и хэштегов при нажатии esc
+  if (isEscapeEvent(evt) && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags')) {//Исключает поля ввода комментов и хэштегов при нажатии esc
     evt.preventDefault();
     closeUploadForm();
   }
 }
 
+const setButtonState = (state) => {
+  imgUploadSubmit.disabled = state;
+};
+
 //Передаёт сообщение об успехе
-const successUpload = () => {
+const uploadSuccess = () => {
+  setButtonState(false);
   closeUploadForm();
-  showMessage('success', SUCCESS_MESSAGE);
+  showMessage(SUCCESS_MESSAGE, SUCCESS_CLASS, SUCCESS_BUTTON_MESSAGE);
 };
 
 //Передаёт сообщение об ошибке
-const errorUpload = () => {
-  showMessage('error', ERROR_MESSAGE, ERROR_BUTTON_MESSAGE);
+const uploadError = () => {
+  setButtonState(false);
+  showMessage(ERROR_MESSAGE, ERROR_CLASS, ERROR_BUTTON_MESSAGE);
 };
 
-async function onUploadFormSubmitClick(evt) {
+const onUploadFormSubmit = (evt) => {
   evt.preventDefault();
 
   if (validatePristine()) {
-    imgUploadSubmit.disabled = true;
-    await sendData(SEND_URL, new FormData(evt.target), successUpload, errorUpload); //Принимает url, тело формы, два колбэка ошибки успеха и ошибки
-    imgUploadSubmit.disabled = false;
-  }
-}
-
-//Проверяет валидность загружаемого файла c изображением
-const isValidType = (file) => {
-  const fileName = file.name.toLowerCase();
-  return FILE_TYPES.some((it) => fileName.endsWith(it));
-};
-
-//Тут магия какая-то
-const onFileInputChange = (evt) => {
-  const file = URL.createObjectURL(evt.target.files[0]);
-  imgUploadPreview.src = file;
-  effectsPreview.forEach((effect) => (effect.style.backgroundImage = `url(${file})`));
-};
-
-const onImgUploadInputChange = (evt) => {
-  if (isValidType) {
-    openUploadForm();
-    onFileInputChange(evt);
+    setButtonState(true);
+    const formData = new FormData(evt.target);
+    sendData(SEND_URL, formData, uploadSuccess, uploadError);
   }
 };
 
@@ -106,8 +117,9 @@ const initUploadForm = () => {
   initValidation();
   initScale();
   initEffects(currentEffectValue); //Передаёт чекнутый чекбокс
-  imgUploadInput.addEventListener('change', onImgUploadInputChange);
-  imgUploadForm.addEventListener('submit', onUploadFormSubmitClick);
+  effectsList.addEventListener('change', onEffectListChange);
+  imgUploadInput.addEventListener('change', onUploadInputChange);
+  imgUploadForm.addEventListener('submit', onUploadFormSubmit);
 };
 
 export { initUploadForm };
