@@ -3,7 +3,6 @@ import { isEscapeEvent } from '../utils/utils.js';
 let message;
 let isOpen = false;
 
-//Создаёт DOM-элемент со строкой ниже
 const createElement = (template) => {
   const div = document.createElement('div');
   div.innerHTML = template;
@@ -56,7 +55,7 @@ const showMessage = (text, type, buttonText) => {
 
   document.addEventListener('keydown', onDocumentKeydown);
 
-  if(!document.body.classList.contains('modal-open')) { //Для того, чтобы убрать скролл под окном
+  if(!document.body.classList.contains('modal-open')) { //Для того, чтобы убрать скролл под модальным окном
     document.body.classList.add('modal-open');
     return;
   }

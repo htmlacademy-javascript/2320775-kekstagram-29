@@ -1,51 +1,43 @@
 const HASHTAG_MAX_COUNT = 5;
-const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i; //Регулярное выражение для проверки строки
+const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 
-const CHECK_HASHTAGS_VALIDITY = 'Используйте валидные хэштеги не более 19 знаков в длину, разделённые пробелами, из букв/чисел, без спецсимволов';
+const CHECK_HASHTAGS_VALIDITY = 'Хэштеги должны состоять из букв/чисел длиной не более 20 знаков, разделённые одним пробелом, без спецсимволов';
 const CHECK_HASHTAGS_COUNT = 'Нельзя указывать более пяти хэштегов';
 const CHECK_DOUBLE_HASHTAGS = 'Один и тот же хэштег не может быть использован дважды';
 
-const imgUploadForm = document.querySelector('.img-upload__form'); //<form class="img-upload__form"
-const textHashtags = document.querySelector('.text__hashtags'); //Поле для хэштега
-// const checkCommentLength = textDescription.dataset.pristineMaxlengthMessage;
+const imgUploadForm = document.querySelector('.img-upload__form');
+const textHashtags = document.querySelector('.text__hashtags');
 
 const pristine = new Pristine(imgUploadForm, {
-  classTo: 'img-upload__field-wrapper', //Вешается на обе обёртки полей <div class="img-upload__field-wrapper">
-  errorTextParent: 'img-upload__field-wrapper' //Куда выводится сообщение об ошибке
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper'
 });
 
-// const checktextDescriptionLength = (value) => value.length <= COMMENT_MAX_LENGTH; //Возвращает true or false
-
 const createHachtags = (value) => value.trim().toLowerCase().split(' ');
-//Обрезает пробелы тримом, приводит к нижнему регистру, сплитом создаёт массив
 
-const checkHashtagsValidity = (value) => { //Проверяет хэштеги на валидность
+const checkHashtagsValidity = (value) => {
   if (!value) {
     return true;
   }
 
   const hashtags = createHachtags(value);
   return hashtags.every((element) => HASHTAG_REGEXP.test(element));
-  //Перебирает массив hashtags, и првоерят, что каждый из элементов массива element соответствует регулярному выражению.
 };
 
-const checkHashtagsCount = (value) => { //Сравнивает длину массива с заданным значением
+const checkHashtagsCount = (value) => {
   const hashtags = createHachtags(value);
   return hashtags.length <= HASHTAG_MAX_COUNT;
 };
 
-const checkHashtagsDouble = (value) => { //Проверяет хэштеги на уникальность
-  const hashtags = createHachtags(value); //Создаёт массив hashtags (принял, например, 2 одинаковых # от пользователя)
+const checkHashtagsDouble = (value) => {
+  const hashtags = createHachtags(value);
   return hashtags.length === new Set(hashtags).size;
-  //Помещает хэштеги в set, set удаляет одинаковые значения, остаётся 1, и если массив из 2 одинаковых #, то set возвращает false
 };
 
-const validatePristine = () => pristine.validate(); //Использует метод библиотеки validate()
-const resetPristine = () => pristine.reset(); //Использует метод библиотеки reset()
+const validatePristine = () => pristine.validate();
+const resetPristine = () => pristine.reset();
 
-//Вывод валидатора (исп. 5 параметров: поле, колбэк проверки, текст ошибки, приоритет, прерывание)
 const initValidation = () => {
-  // pristine.addValidator(textDescription, checktextDescriptionLength, checkCommentLength, 1, true);
   pristine.addValidator(textHashtags, checkHashtagsValidity, CHECK_HASHTAGS_VALIDITY, 1, true);
   pristine.addValidator(textHashtags, checkHashtagsCount, CHECK_HASHTAGS_COUNT, 1, true);
   pristine.addValidator(textHashtags, checkHashtagsDouble, CHECK_DOUBLE_HASHTAGS, 1, true);

@@ -1,16 +1,16 @@
 import { makeAllThumbnails } from './thumbnails.js';
 import { getRandomInteger } from '../utils/utils.js';
 
-const RANDOM_IMAGES_COUNT = 10; //Случайные — 10 случайных, не повторяющихся фотографий.
+const RANDOM_IMAGES_COUNT = 10;
 const DELAY = 500;
 const FILTERS = {
-  random: 'filter-random', //<button type=button class="img-filters__button" id="filter-random">Случайные</button>
-  discussed: 'filter-discussed' //<button type=button class="img-filters__button" id="filter-discussed">Обсуждаемые</button>
+  random: 'filter-random',
+  discussed: 'filter-discussed'
 };
-//Фильтрация изображений от других пользователей <section class="img-filters  img-filters--inactive  container">
+
+//Фильтрация изображений от других пользователей
 const imgFilters = document.querySelector('.img-filters');
 const imgFiltersForm = document.querySelector('.img-filters__form');
-//Контейнер для изображений от других пользователей <section class="pictures  container">
 const picturesContainer = document.querySelector('.pictures');
 
 let timeout;
@@ -34,7 +34,7 @@ const getFilterinData = (id, data) => {
     case FILTERS.discussed:
       return sortByCommentsCount(data);
     default:
-      return data; //<button type=button class="img-filters__button img-filters__button--active" id="filter-default">По умолчанию</button>
+      return data;
   }
 };
 
@@ -44,7 +44,7 @@ const renderFilteringPictures = (id, data) => {
 };
 
 const initFilter = (data) => {
-  imgFilters.classList.remove('img-filters--inactive'); //<section class="img-filters  img-filters--inactive  container">
+  imgFilters.classList.remove('img-filters--inactive');
 
   imgFiltersForm.addEventListener('click', (evt) => {
     if (evt.target.closest('.img-filters__button') && !evt.target.closest('.img-filters__button--active')) {

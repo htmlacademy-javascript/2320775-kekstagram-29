@@ -1,5 +1,5 @@
 //Универсальная функция
-const getData = (url, onSuccess, onError) => { //принимает url и 2 колбэка
+const getData = (url, onSuccess, onError) => {
   fetch(url)
     .then((response) => {
       if (response.ok) {

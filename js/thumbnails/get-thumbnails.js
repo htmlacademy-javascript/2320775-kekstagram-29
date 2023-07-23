@@ -9,7 +9,7 @@ const ERROR_GET_DATA = 'error';
 const DELAY = 3000;
 
 const onGetSuccess = (data) => {
-  initFilter(data); //в случае успешной загрузки данных запускает фильтр
+  initFilter(data);
   makeAllThumbnails(data);
 };
 
