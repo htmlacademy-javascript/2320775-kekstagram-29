@@ -3,8 +3,8 @@ import { showBigPictures } from './show-big-pictures.js';
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const makeOneThumbnail = ({ comments, description, likes, url, id }) => {
-
+const makeOneThumbnail = (data) => {
+  const { comments, description, likes, url, id } = data;
   const thumbnail = pictureTemplate.cloneNode(true);
   const thumbnailPictureImg = thumbnail.querySelector('.picture__img');
   thumbnailPictureImg.src = url;
@@ -15,7 +15,7 @@ const makeOneThumbnail = ({ comments, description, likes, url, id }) => {
 
   thumbnail.addEventListener('click', (evt) => {
     evt.preventDefault();
-    showBigPictures({ comments, description, likes, url, id });
+    showBigPictures(data);
   });
 
   return thumbnail;

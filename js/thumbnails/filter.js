@@ -1,5 +1,4 @@
 import { makeAllThumbnails } from './thumbnails.js';
-import { getRandomInteger } from '../utils/utils.js';
 
 const RANDOM_IMAGES_COUNT = 10;
 const DELAY = 500;
@@ -20,14 +19,14 @@ const sortByCommentsCount = (data) => (data.slice().sort((a, b) => b.comments.le
 const sortInRandomOrder = (data) => {
   const dataClone = data.slice();
   for (let i = dataClone.length - 1; i > 0; i--) {
-    const j = getRandomInteger(data);
+    const j = Math.floor(Math.random() * (i + 1));
     [dataClone[i], dataClone[j]] = [dataClone[j], dataClone[i]];
   }
 
   return dataClone.slice(0, RANDOM_IMAGES_COUNT);
 };
 
-const getFilterinData = (id, data) => {
+const getFilteringData = (id, data) => {
   switch (id) {
     case FILTERS.random:
       return sortInRandomOrder(data);
@@ -40,7 +39,7 @@ const getFilterinData = (id, data) => {
 
 const renderFilteringPictures = (id, data) => {
   picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
-  makeAllThumbnails(getFilterinData(id, data));
+  makeAllThumbnails(getFilteringData(id, data));
 };
 
 const initFilter = (data) => {

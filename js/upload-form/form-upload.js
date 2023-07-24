@@ -11,7 +11,7 @@ const ERROR_CLASS = 'error';
 const SUCCESS_MESSAGE = 'Изображение успешно загружено';
 const ERROR_MESSAGE = 'Ошибка загрузки файла';
 const ERROR_BUTTON_MESSAGE = 'Попробовать ещё раз';
-const ERROR_FORMAT = 'Неверный формат файла';
+const ERROR_FORMAT_MESSAGE = 'Неверный формат файла';
 const SUCCESS_BUTTON_MESSAGE = 'Круто!';
 const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 
@@ -27,11 +27,8 @@ const imgUploadSubmit = document.querySelector('.img-upload__submit');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 
-const onEffectListChange = (evt) => {
-  initEffects(evt.target.value);
-};
+const onEffectListChange = (evt) => initEffects(evt.target.value);
 
-//Открывает форму загрузки изображения
 const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -40,12 +37,11 @@ const openUploadForm = () => {
   imgUploadCancelButton.addEventListener('click', onImgUploadCancelButtonClick);
 };
 
-//Закрывает форму загрузки изображения
 const closeUploadForm = () => {
   imgUploadForm.reset();
   resetScale();
   resetPristine();
-  initEffects(currentEffectValue); //Сброс до дефолтных значений чекбокса
+  initEffects(currentEffectValue);
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseButtonKeydown);
@@ -57,7 +53,7 @@ const onFileInputChange = (evt) => {
   const image = evt.target.files[0];
   const imageName = image.name.toLowerCase();
 
-  const matches = FILE_TYPES.some((fileType) => imageName.endsWith(fileType));//Провярет сопадения окончаний
+  const matches = FILE_TYPES.some((fileType) => imageName.endsWith(fileType));
 
   if (matches) {
     const fileUrl = URL.createObjectURL(image);
@@ -67,7 +63,7 @@ const onFileInputChange = (evt) => {
     return;
   }
 
-  showMessage(ERROR_FORMAT, ERROR_CLASS);
+  showMessage(ERROR_FORMAT_MESSAGE, ERROR_CLASS);
 };
 
 const onUploadInputChange = (evt) => onFileInputChange(evt);
@@ -78,24 +74,20 @@ function onImgUploadCancelButtonClick (evt){
 }
 
 function onCloseButtonKeydown (evt) {
-  if (isEscapeEvent(evt) && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags')) {//Исключает поля ввода комментов и хэштегов при нажатии esc
+  if (isEscapeEvent(evt) && !evt.target.closest('.text__description') && !evt.target.closest('.text__hashtags') && !document.querySelector('.error')) {
     evt.preventDefault();
     closeUploadForm();
   }
 }
 
-const setButtonState = (state) => {
-  imgUploadSubmit.disabled = state;
-};
+const setButtonState = (state) => (imgUploadSubmit.disabled = state);
 
-//Передаёт сообщение об успехе
 const uploadSuccess = () => {
   setButtonState(false);
   closeUploadForm();
   showMessage(SUCCESS_MESSAGE, SUCCESS_CLASS, SUCCESS_BUTTON_MESSAGE);
 };
 
-//Передаёт сообщение об ошибке
 const uploadError = () => {
   setButtonState(false);
   showMessage(ERROR_MESSAGE, ERROR_CLASS, ERROR_BUTTON_MESSAGE);
@@ -106,8 +98,7 @@ const onUploadFormSubmit = (evt) => {
 
   if (validatePristine()) {
     setButtonState(true);
-    const formData = new FormData(evt.target);
-    sendData(SEND_URL, formData, uploadSuccess, uploadError);
+    sendData(SEND_URL, new FormData(evt.target), uploadSuccess, uploadError);
   }
 };
 

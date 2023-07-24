@@ -28,6 +28,7 @@ const onDocumentKeydown = (evt) => {
 
 const onCloseButtonClick = () => closeMessage();
 
+//Линтер
 function closeMessage() {
   message.remove();
   document.removeEventListener('keydown', onDocumentKeydown);

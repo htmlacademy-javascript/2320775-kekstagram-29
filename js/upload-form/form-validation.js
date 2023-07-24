@@ -13,24 +13,24 @@ const pristine = new Pristine(imgUploadForm, {
   errorTextParent: 'img-upload__field-wrapper'
 });
 
-const createHachtags = (value) => value.trim().toLowerCase().split(' ');
+const createHashtags = (value) => value.trim().toLowerCase().split(' ');
 
 const checkHashtagsValidity = (value) => {
   if (!value) {
     return true;
   }
 
-  const hashtags = createHachtags(value);
+  const hashtags = createHashtags(value);
   return hashtags.every((element) => HASHTAG_REGEXP.test(element));
 };
 
 const checkHashtagsCount = (value) => {
-  const hashtags = createHachtags(value);
+  const hashtags = createHashtags(value);
   return hashtags.length <= HASHTAG_MAX_COUNT;
 };
 
 const checkHashtagsDouble = (value) => {
-  const hashtags = createHachtags(value);
+  const hashtags = createHashtags(value);
   return hashtags.length === new Set(hashtags).size;
 };
 
