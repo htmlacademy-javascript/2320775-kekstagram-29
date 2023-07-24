@@ -57,7 +57,6 @@ const setContainerState = (value) => {
   imgUploadEffectLevel.classList.remove('hidden');
 };
 
-//Создаёт слайдер
 const createSlider = (data) => {
   const { filter, min, max, step, unit } = EFFECTS[data] || EFFECTS.original;
   setContainerState(data);
@@ -78,7 +77,6 @@ const createSlider = (data) => {
   });
 };
 
-//Инициализация эффектов слайдера
 const initEffects = (data) => {
   if (effectLevelSlider.noUiSlider) {
     effectLevelSlider.noUiSlider.destroy();

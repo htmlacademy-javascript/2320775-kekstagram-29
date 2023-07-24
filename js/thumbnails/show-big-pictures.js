@@ -2,18 +2,15 @@ import { isEscapeEvent } from '../utils/utils.js';
 
 const COMMENTS_COUNTER = 5;
 
-//Открытие-закрытие окна с изображением
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
-
-//Добавление информации к большому изображению при открытии окна
 const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const socialCommentsList = bigPicture.querySelector('.social__comments');
-const socialCommentsItem = bigPicture.querySelector('.social__comment'); //<li class="social__comment">
-const socialCommentCaption = bigPicture.querySelector('.social__caption'); //<p class="social__caption">Тестим новую камеру! =)</p>
-const socialCommentsLoader = bigPicture.querySelector('.comments-loader'); //<button type="button" class="social__comments-loader comments-loader">Загрузить еще</button>
-const socialCommentsCount = bigPicture.querySelector('.social__comment-count'); //<div class="social__comment-count">5 из <span class="comments-count">125</span> комментариев</div>
+const socialCommentsItem = bigPicture.querySelector('.social__comment');
+const socialCommentCaption = bigPicture.querySelector('.social__caption');
+const socialCommentsLoader = bigPicture.querySelector('.comments-loader');
+const socialCommentsCount = bigPicture.querySelector('.social__comment-count');
 
 let showCommentsCount = 0;
 let comments;
@@ -30,7 +27,6 @@ const setButtonState = () => {
   socialCommentsLoader.classList.remove('hidden');
 };
 
-//Создаёт и заполняет один комментарий информацией
 const fillCommentElement = (element) => {
   const comment = socialCommentsItem.cloneNode(true);
   const socialPictureAvatar = comment.querySelector('.social__picture');
@@ -40,7 +36,6 @@ const fillCommentElement = (element) => {
   return comment;
 };
 
-//Рендерит список комментариев
 const renderComments = () => {
   const fragment = document.createDocumentFragment();
   const currentComments = comments.slice(showCommentsCount, showCommentsCount + COMMENTS_COUNTER);
@@ -73,14 +68,13 @@ const closeBigPicture = () => {
   showCommentsCount = 0; //Обнуление отображённых комментариев
 };
 
-//Удаляет обработчик по кнопке при закрытии. Объявляется декларативно для обхода линтера
+//Объявляется декларативно для линтера
 function onCloseButtonKeydown (evt) {
   if (isEscapeEvent(evt) && !evt.target.closest('.social__footer-text')) {
     closeBigPicture();
   }
 }
 
-//Удаляет обработчик по клику при закрытии. Объявляется декларативно для обхода линтера
 function onCloseButtonClick (evt) {
   evt.preventDefault();
   closeBigPicture();
